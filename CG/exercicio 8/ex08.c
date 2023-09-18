@@ -19,7 +19,6 @@ int raio = 80;
 float xGlobal = 250;
 float yGlobal = 300;
 float espessura = 1.0;
-
 void init(void);
 void display(void);
 void keyboard(unsigned char key, int x, int y);
