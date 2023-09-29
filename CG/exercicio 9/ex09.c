@@ -53,12 +53,7 @@ void display(void)
   int quantidade = 6;
   float raioBase = 0.2;
 
-  glPushMatrix();
-  glRotatef(anguloRotacao, 0.0f, 0.0f, 1.0f); // Aplica a rotação no eixo Z.
-  desenhaCirculosAoRedorOrigem(quantidade, raioBase);
-  glPopMatrix();
-
-  // cabo
+    // cabo
   glPushMatrix();
   glColor3f(0.0f, 1.0f, 0.0f);
   glTranslatef(0.0f, -0.8f, 0.0f);
@@ -70,6 +65,13 @@ void display(void)
   glEnd();
   glPopMatrix();
 
+
+  glPushMatrix();
+  glRotatef(anguloRotacao, 0.0f, 0.0f, 1.0f); // Aplica a rotação no eixo Z.
+  desenhaCirculosAoRedorOrigem(quantidade, raioBase);
+  glPopMatrix();
+
+
   // circulo
   glPushMatrix();
   glColor3f(1.0f, 1.0f, 0.0f);
@@ -77,6 +79,7 @@ void display(void)
   glPopMatrix();
 
   glFlush();
+  
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -109,3 +112,15 @@ int main(int argc, char **argv)
   glutMainLoop();
   return 0;
 }
+
+
+/*
+  _________  ___  ___  ________  _____ ______   ________  ________
+ |\___   ___\\  \|\  \|\   __  \|\   _ \  _   \|\   __  \|\   ____\     
+ \|___ \  \_\ \  \\\  \ \  \|\  \ \  \\\__\ \  \ \  \|\  \ \  \___|_
+      \ \  \ \ \   __  \ \  \\\  \ \  \\|__| \  \ \   __  \ \_____  \   
+       \ \  \ \ \  \ \  \ \  \\\  \ \  \    \ \  \ \  \ \  \|____|\  \  
+        \ \__\ \ \__\ \__\ \_______\ \__\    \ \__\ \__\ \__\____\_\  \ 
+         \|__|  \|__|\|__|\|_______|\|__|     \|__|\|__|\|__|\_________\
+  
+*/
