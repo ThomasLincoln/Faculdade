@@ -130,10 +130,20 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(largura, altura);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Desenhando uma flor");
+    glutCreateWindow("Desenhando um carro");
     init();
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
     return 0;
 }
+
+
+//  _________  ___  ___  ________  _____ ______   ________  ________
+// |\___   ___\\  \|\  \|\   __  \|\   _ \  _   \|\   __  \|\   ____\     
+// \|___ \  \_\ \  \\\  \ \  \|\  \ \  \\\__\ \  \ \  \|\  \ \  \___|_
+//      \ \  \ \ \   __  \ \  \\\  \ \  \\|__| \  \ \   __  \ \_____  \   
+//       \ \  \ \ \  \ \  \ \  \\\  \ \  \    \ \  \ \  \ \  \|____|\  \  
+//        \ \__\ \ \__\ \__\ \_______\ \__\    \ \__\ \__\ \__\____\_\  \ 
+//         \|__|  \|__|\|__|\|_______|\|__|     \|__|\|__|\|__|\_________\
+//  
