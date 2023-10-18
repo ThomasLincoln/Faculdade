@@ -1,16 +1,3 @@
-/*
-  _________  ___  ___  ________  _____ ______   ________  ________
- |\___   ___\\  \|\  \|\   __  \|\   _ \  _   \|\   __  \|\   ____\     
- \|___ \  \_\ \  \\\  \ \  \|\  \ \  \\\__\ \  \ \  \|\  \ \  \___|_
-      \ \  \ \ \   __  \ \  \\\  \ \  \\|__| \  \ \   __  \ \_____  \   
-       \ \  \ \ \  \ \  \ \  \\\  \ \  \    \ \  \ \  \ \  \|____|\  \  
-        \ \__\ \ \__\ \__\ \_______\ \__\    \ \__\ \__\ \__\____\_\  \ 
-         \|__|  \|__|\|__|\|_______|\|__|     \|__|\|__|\|__|\_________\
-  
-*/
-
-// comando para abrir a porta: ngrok http 3000
-
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -19,7 +6,8 @@ app.set('trust proxy', true);
 
 app.get('/', (req, res) => {
   const ip = req.ip;
-  const ipAddr = ip.match(/\d+\.\d+\.\d+\.\d+/)[0];
+  const matchedIp = ip.match(/\d+\.\d+\.\d+\.\d+/);
+  const ipAddr = matchedIp ? matchedIp[0] : ip;
 
   res.send(`
     <!DOCTYPE html>
@@ -33,7 +21,6 @@ app.get('/', (req, res) => {
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script>
 
-        // função para atualizar o código sem ter que dar f5: 
           function updateTime() {
             const date = new Date();
             const formattedDateTime = \`\${date.getFullYear()}-\${(date.getMonth() + 1)
