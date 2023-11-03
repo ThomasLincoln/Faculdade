@@ -82,3 +82,14 @@ Neste exercício, nosso objetivo é criar três desenhos diferentes utilizando a
     * Desenho final com glTranslatef, glRotatef e glScalef.
 
 Esta abordagem nos permitirá explorar as transformações em OpenGL para criar animações e movimentos mais dinâmicos nos desenhos. Se você precisar de informações adicionais ou tiver alguma dúvida sobre como implementar esses desenhos, por favor, sinta-se à vontade para perguntar.
+
+## Exercicio 14
+
+**Implementar o algoritmo de recorte de linha 2D de Cohen-Sutherland**
+
+Plotar um quadro semelhante ao exercício anterior. 
+
+Dados um clique inicial e um clique final com o botão esquerdo do mouse, que darão os pontos inicial e final da linha, somente devem ser mostradas as partes da
+linha que se encontram dentro do quadro.
+
+O recorte deve ser feito seguindo o algoritmo de Cohen-Sutherland

@@ -1,112 +1,127 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <GL/glut.h>
+#include<windows.h>
+#include<GL/glu.h>
+#include<GL/glut.h>
 
-#define PI 3.141592654
+GLfloat xMin=-0.5,xMax=0.5,yMin=-0.5,yMax=0.5;
+GLfloat x1=-0.8,y1=-0.6,x2=0.7,y2=0.4;
 
-float up=0.0;
-float right=0.0;
+int Left=1,Right=2,Bot=4,Top=8;
+int C1,C2;
+int Clip_Flag = 0, Flag = 1;;
 
-void circulo(){
-    int i;
-    float angulo = 0.0;
-    glBegin(GL_POLYGON);
-        for (i=0;i<=50;i++) {
-            angulo= 2 * PI * i / 50.0;
-            glVertex2f(0.25*cos(angulo), 0.25*sin(angulo));
-        }
-    glEnd ();
+
+int Get_Code(GLfloat x,GLfloat y)
+{
+    int Code = 0;
+    if(x<xMin)
+        Code = Code | Left;
+    if(x>xMax)
+        Code = Code | Right;
+    if(y<yMin)
+        Code = Code | Bot;
+    if(y>yMax)
+        Code = Code | Top;
+    return Code;
 }
 
-void quadrado(float incX, float incY){
-    glBegin(GL_POLYGON);
-        glVertex2f(-0.25+incX+right, 0.25+incY+up);
-        glVertex2f(0.25+incX+right, 0.25+incY+up);
-        glVertex2f(0.25+incX+right, -0.25+incY+up);
-        glVertex2f(-0.25+incX+right, -0.25+incY+up);
-    glEnd();
+void Clip()
+{
+    int C;
+    GLfloat x,y;
+    if(C1)
+        C = C1;
+    else
+        C = C2;
+
+    if(C & Left)
+    {
+        x = xMin;
+        y = y1+(y2-y1)*((xMin-x1)/(x2-x1));
+    }
+    if(C & Right)
+    {
+        x = xMax;
+        y = y1+(y2-y1)*((xMax-x1)/(x2-x1));
+    }
+    if(C & Bot)
+    {
+        y = yMin;
+        x = x1+(x2-x1)*((yMin-y1)/(y2-y1));
+    }
+    if(C & Top)
+    {
+        y = yMax;
+        x = x1+(x2-x1)*((yMax-y1)/(y2-y1));
+    }
+
+    if(C == C1)
+    {
+        x1 = x;
+        y1 = y;
+    }
+    else
+    {
+        x2 = x;
+        y2 = y;
+    }
 }
 
-void desenha(){
-    glClearColor(0, 0, 0, 0); //Preto
+void Draw()
+{
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0,1.0,1.0);
-    circulo();
-    glColor3f(1.0,0.0,0.0);
-    quadrado(0.5,0.5);
-    glColor3f(0.0,1.0,0.0);
-    quadrado(-0.5,0.5);
-    glColor3f(0.0,0.0,1.0);
-    quadrado(0.5,-0.5);
-    glColor3f(1.0,1.0,0.0);
-    quadrado(-0.5,-0.5);
+
+    glColor3f(1,1,1);
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(xMin,yMin);
+        glVertex2f(xMax,yMin);
+        glVertex2f(xMax,yMax);
+        glVertex2f(xMin,yMax);
+    glEnd();
+
+    glColor3f(1,0,0);
+    if(Flag == 1)
+    {
+     glBegin(GL_LINES);
+        glVertex2f(x1,y1);
+        glVertex2f(x2,y2);
+    glEnd();
+    }
+
+    while(1 & Clip_Flag == 1)
+    {
+        C1 = Get_Code(x1,y1);
+        C2 = Get_Code(x2,y2);
+
+        if((C1|C2) == 0)
+            break;
+        else if((C1&C2)!=0)
+        {
+            Flag = 0;
+            break;
+        }
+        else
+            Clip();
+    }
     glFlush();
 }
 
-void teclado(unsigned char tecla, int x, int y){
-    switch (tecla) {
-        case 'u':
-            up+=0.05;
-            break;
-        case 'd':
-            up-=0.05;
-            break;
-        case 'r':
-            right+=0.05;
-            break;
-        case 'l':
-            right-=0.05;
-        default:
-            break;
-    }
+void Key(unsigned char ch,int x,int y)
+{
+    Clip_Flag = 1;
     glutPostRedisplay();
 }
 
-void tecladoEspecial(int tecla, int x, int y){
-    switch (tecla) {
-        case GLUT_KEY_UP:
-            up+=0.05;
-            break;
-        case GLUT_KEY_DOWN:
-            up-=0.05;
-            break;
-        case GLUT_KEY_RIGHT:
-            right+=0.05;
-            break;
-        case GLUT_KEY_LEFT:
-            right-=0.05;
-            break;
-            
-        default:
-            break;
-    }
-    glutPostRedisplay();
-}
-
-void mouse(int botao, int estado, int x, int y){
-    switch (botao) {
-        case GLUT_LEFT_BUTTON:
-            if(estado==GLUT_DOWN)
-                printf("x = %i, y = %i\n",x,y);
-            break;
-            
-        default:
-            break;
-    }
-    glutPostRedisplay();
-}
-
-int main ( int argc , char * argv [] ){
-    glutInit(&argc , argv);
-    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowPosition (50 ,100);
-    glutInitWindowSize (400 ,400);
-    glutCreateWindow ("Primeiro programa usando OpenGL");
-    glutDisplayFunc (desenha);
-    glutKeyboardFunc(teclado);
-    glutSpecialFunc(tecladoEspecial);
-    glutMouseFunc(mouse);
-    glutMainLoop ();
+int main(int argC,char *argV[])
+{
+    glutInit(&argC,argV);
+    glutInitWindowSize(500,500);
+    glutInitWindowPosition(100,100);
+    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+    glutCreateWindow("Cohen-Sutherland Algorithm");
+    glutDisplayFunc(Draw);
+    glutKeyboardFunc(Key);
+    glutMainLoop();
     return 0;
 }
+
+
