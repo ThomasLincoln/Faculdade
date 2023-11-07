@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include<GL/glu.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
 
 float xMin = -0.5, xMax = 0.5, yMin = -0.5, yMax = 0.5;
@@ -10,24 +10,27 @@ float pos_x2 = 0.6, pos_y2 = 0.9;
 
 int count = 0;
 
+// dados para poder adicionar bits no código
 int ESQUERDA = 1;
 int DIREITA = 2;
 int BOT = 4;
 int TOP = 8;
-int Clip_Flag = 0, Flag =1;
+
+// flags para saber se passa pelo código de clip ou não
+int Clip_Flag = 0, Flag = 1;
 
 int C1, C2;
 
-int ObterCodigo(float x,float y)
+int ObterCodigo(float x, float y)
 {
     int Code = 0;
-    if(x<xMin)
+    if (x < xMin)
         Code = Code | ESQUERDA;
-    if(x>xMax)
+    if (x > xMax)
         Code = Code | DIREITA;
-    if(y<yMin)
+    if (y < yMin)
         Code = Code | BOT;
-    if(y>yMax)
+    if (y > yMax)
         Code = Code | TOP;
     return Code;
 }
@@ -49,7 +52,6 @@ void Clip()
     {
         x = xMin;
         y = pos_y1 + (pos_y2 - pos_y1) * ((xMin - pos_x1) / (pos_x2 - pos_x1));
-        
     }
 
     if (C & DIREITA)
@@ -86,6 +88,7 @@ void desenha()
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // retangulo
     glColor3f(1, 1, 1);
     glBegin(GL_LINE_LOOP);
     glVertex2f(xMin, yMin);
@@ -95,14 +98,17 @@ void desenha()
     glEnd();
 
     glColor3f(1, 0, 0);
-    if(Flag == 1){
+    // se ele estiver dentro ele desenha sem recortar
+    if (Flag == 1)
+    {
 
-    glBegin(GL_LINES);
-    glVertex2f(pos_x1, pos_y1);
-    glVertex2f(pos_x2, pos_y2);
-    glEnd();
+        glBegin(GL_LINES);
+        glVertex2f(pos_x1, pos_y1);
+        glVertex2f(pos_x2, pos_y2);
+        glEnd();
     }
 
+    // se tivermos ligado o valor de corte ele vai começar a recortar
     while (1 & Clip_Flag == 1)
     {
 
@@ -156,7 +162,7 @@ void mouseInteraction(int botao, int estado, int x, int y)
     glutPostRedisplay();
 }
 
-void key(unsigned char ch,int x,int y)
+void key(unsigned char ch, int x, int y)
 {
     Clip_Flag = 1;
     glutPostRedisplay();
