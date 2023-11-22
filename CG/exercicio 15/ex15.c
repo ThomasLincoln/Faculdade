@@ -20,6 +20,8 @@ int DIREITA = 2;
 int BOT = 4;
 int TOP = 8;
 
+int Clip = 0;
+
 int ObterCodigo(float x, float y)
 {
     int Code = 0;
@@ -58,7 +60,8 @@ void desenharPoligono(Ponto poligonos[])
     glBegin(GL_LINE_LOOP);
 
     for (int i = 0; i < n; i++)
-    {
+    {   
+        printf("Ponto x: %f y: %f", poligonos[i].x, poligonos[i].y);
         glVertex2f(poligonos[i].x, poligonos[i].y);
     }
 
@@ -66,11 +69,24 @@ void desenharPoligono(Ponto poligonos[])
 }
 void recortadorEsquerda(Ponto p1, Ponto p2, Ponto novaForma[], int i)
 {
-
 }
-void recortaPoligono()
+void recortaPoligono(Ponto poligoRecortado[])
 {
-
+    for (int i = 0; i < count; i++)
+    {
+        int codP1 = ObterCodigo(poligono[i].x, poligono[i].y);
+        int codP2 = ObterCodigo(poligono[i + 1].x, poligono[i + 1].y);
+        Ponto p1 = poligono[i];
+        Ponto p2 = poligono[i + 1];
+        Ponto aux;
+        if (!(codP1 & ESQUERDA) && (codP2 & ESQUERDA))
+        {
+            poligoRecortado[i] = poligono[i];
+            aux.x = xMin;
+            aux.y = p1.y + (p2.y - p1.y) * ((xMin - p1.x) / (p2.x - p1.x));
+            poligoRecortado[i + 1] = aux;
+        }
+    }
 }
 
 void desenha()
@@ -90,21 +106,20 @@ void desenha()
 
     glColor3f(1, 0, 0);
 
-    desenharPoligono(poligono);
-    recortadorEsquerda(poligono[0], poligono[1], poligonoRecortado, 0);
-    glColor3f(0, 1, 0);
-    // desenharPoligono(poligonoRecortado);
-
-    // if (count == 2)
-    // {
-
-        // for (int i = 0; i < count; i++)
-        // {
-            // poligono[i] = poligonoRecortado[i];
-        // }
-    // }
-
+    if (Clip == 1)
+    {
+        printf("Ativado Recorte");
+        recortaPoligono(poligonoRecortado);
+        glColor3f(0, 1, 0);
+        desenharPoligono(poligonoRecortado);
+    }
     glFlush();
+}
+
+void key(unsigned char ch, int x, int y)
+{
+    Clip = 1;
+    glutPostRedisplay();
 }
 
 void mouseInteraction(int botao, int estado, int x, int y)
@@ -141,6 +156,7 @@ int main(int argc, char *argv[])
     glutCreateWindow("Exercicio 14");
     glutDisplayFunc(desenha);
     glutMouseFunc(mouseInteraction);
+    glutKeyboardFunc(key);
     glutMainLoop();
 
     return 0;
