@@ -36,8 +36,21 @@ char* filenameArray[MAX_NO_TEXTURES] = {
 
 GLUquadricObj *obj;
 
-GLfloat angleX = 0.0f;
-GLfloat angleY = 0.0f;
+GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0}; // Posição da luz (direcional)
+GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};  // Cor difusa da luz
+GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0}; // Cor especular da luz
+
+void initLighting()
+{
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+    glShadeModel(GL_SMOOTH); // Use sombreamento suave
+}
 
 void getJpgImageData( char *pFileName, JPGImage *pImage )
 {
@@ -121,10 +134,16 @@ void cubo()
     glColor3f(1.0, 0.0, 0.0);
     
     // FACE 1
+    glBindTexture(GL_TEXTURE_2D, texture_id[0]);
+    glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.25, 0.25, 0.25);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(0.25, 0.25, 0.25);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.25, -0.25, 0.25);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-0.25, -0.25, 0.25);
     glEnd();
 
@@ -132,63 +151,92 @@ void cubo()
     glBindTexture(GL_TEXTURE_2D, texture_id[0]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-
     glTexCoord2f(0.0f,0.0f);
     glVertex3f(-0.25, 0.25, -0.25);
-
     glTexCoord2f(1.0f,0.0f);
     glVertex3f(0.25, 0.25, -0.25);
-
     glTexCoord2f(1.0f,1.0f);
     glVertex3f(0.25, -0.25, -0.25);
-
     glTexCoord2f(0.0f,1.0f);
     glVertex3f(-0.25, -0.25, -0.25);
     glEnd();
     
     
-    glColor3f(0.0, 0.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(0.25, -0.25, 0.25);
-    glVertex3f(0.25, 0.25, 0.25);
-    glVertex3f(0.25, 0.25, -0.25);
-    glVertex3f(0.25, -0.25, -0.25);
-    glEnd();
+glBindTexture(GL_TEXTURE_2D, texture_id[0]);
+glColor3f(0.0, 0.0, 1.0);
+glBegin(GL_POLYGON);
+glTexCoord2f(0.0f, 0.0f);
+glVertex3f(0.25, -0.25, 0.25);
+glTexCoord2f(1.0f, 0.0f);
+glVertex3f(0.25, 0.25, 0.25);
+glTexCoord2f(1.0f, 1.0f);
+glVertex3f(0.25, 0.25, -0.25);
+glTexCoord2f(0.0f, 1.0f);
+glVertex3f(0.25, -0.25, -0.25);
+glEnd();
 
+// FACE 3
+glBindTexture(GL_TEXTURE_2D, texture_id[0]);
+glColor3f(1.0, 1.0, 0.0);
+glBegin(GL_POLYGON);
+glTexCoord2f(0.0f, 0.0f);
+glVertex3f(-0.25, -0.25, 0.25);
+glTexCoord2f(1.0f, 0.0f);
+glVertex3f(-0.25, 0.25, 0.25);
+glTexCoord2f(1.0f, 1.0f);
+glVertex3f(-0.25, 0.25, -0.25);
+glTexCoord2f(0.0f, 1.0f);
+glVertex3f(-0.25, -0.25, -0.25);
+glEnd();
 
-    glColor3f(1.0, 1.0, 0.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(-0.25, -0.25, 0.25);
-    glVertex3f(-0.25, 0.25, 0.25);
-    glVertex3f(-0.25, 0.25, -0.25);
-    glVertex3f(-0.25, -0.25, -0.25);
-    glEnd();
     
     
-    glColor3f(1.0, 0.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(-0.25, 0.25, 0.25);
-    glVertex3f(0.25, 0.25, 0.25);
-    glVertex3f(0.25, 0.25, -0.25);
-    glVertex3f(-0.25, 0.25, -0.25);
-    glEnd();
-    
-    glColor3f(0.0, 1.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(-0.25, -0.25, 0.25);
-    glVertex3f(0.25, -0.25, 0.25);
-    glVertex3f(0.25, -0.25, -0.25);
-    glVertex3f(-0.25, -0.25, -0.25);
-    glEnd();
+// FACE 4
+glBindTexture(GL_TEXTURE_2D, texture_id[0]);
+glColor3f(1.0, 0.0, 1.0);
+glBegin(GL_POLYGON);
+glTexCoord2f(0.0f, 0.0f);
+glVertex3f(-0.25, 0.25, 0.25);
+glTexCoord2f(1.0f, 0.0f);
+glVertex3f(0.25, 0.25, 0.25);
+glTexCoord2f(1.0f, 1.0f);
+glVertex3f(0.25, 0.25, -0.25);
+glTexCoord2f(0.0f, 1.0f);
+glVertex3f(-0.25, 0.25, -0.25);
+glEnd();
+
+// FACE 5
+glBindTexture(GL_TEXTURE_2D, texture_id[0]);
+glColor3f(0.0, 1.0, 1.0);
+glBegin(GL_POLYGON);
+glTexCoord2f(0.0f, 0.0f);
+glVertex3f(-0.25, -0.25, 0.25);
+glTexCoord2f(1.0f, 0.0f);
+glVertex3f(0.25, -0.25, 0.25);
+glTexCoord2f(1.0f, 1.0f);
+glVertex3f(0.25, -0.25, -0.25);
+glTexCoord2f(0.0f, 1.0f);
+glVertex3f(-0.25, -0.25, -0.25);
+glEnd();
+
 }
 
 void desenha()
 {
+
+
     glClearColor(0, 0, 0, 0); // Preto
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);  // Ativa o uso de iluminação
+    glEnable(GL_COLOR_MATERIAL); // Ativa o uso da cor do material
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+
+    // Configuração da luz
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
     // CABEÇA
     glPushMatrix();
@@ -324,6 +372,7 @@ int main(int argc, char *argv[])
     glutCreateWindow("STEVEMINECRAFT");
     glutDisplayFunc(desenha);
     glutKeyboardFunc(tecladoEspecial);
+    initLighting(); // Inicializa as configurações de iluminação
     initTexture();
     glutMainLoop();
     return 0;
