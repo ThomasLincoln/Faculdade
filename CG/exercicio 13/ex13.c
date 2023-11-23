@@ -17,6 +17,13 @@ float thetaY = 0.0;
 float angulo = -45.0;
 bool praFrente = false;
 
+typedef struct BMPImagem
+{
+    int   width;
+    int   height;
+    char *data;
+}BMPImage;
+
 void cubo()
 {
     glColor3f(1.0, 0.0, 0.0);
